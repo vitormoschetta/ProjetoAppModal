@@ -1,0 +1,35 @@
+
+.form-control {
+    height: 30px;
+  }
+  
+  select{
+    font-size: 13px;
+  }
+
+  .table {
+    font-size: 13px;
+  }
+  
+  input[type="text"]
+  {
+      font-size:13px;
+  }
+  
+  
+  input[type="date"]
+  {
+      font-size:13px;
+  }
+  
+  
+  textarea { font-size: 13px; }
+  
+  
+  select option{
+    font-size: 13px;
+  }
+  
+  select option:first-child {
+    font-size: 13px;
+  }
