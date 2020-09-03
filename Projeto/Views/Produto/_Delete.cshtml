@@ -9,35 +9,32 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-          <form asp-action="DeleteConfirm">
-            <dl class="dl-horizontal">
-              
-                <input type="hidden" asp-for="Id"/>
-                <dt>
-                    Nome
-                </dt>
-                <dd>
-                    @Model.Nome
-                </dd>
-                <dt>
-                    Preço
-                </dt>
-                <dd>
-                    @Model.Preco
-                </dd>              
-            </dl>
-            
-            
-                <div class="form-actions no-color">
-                    <input type="submit" value="Delete" class="btn btn-danger" />
-                </div>
-            </form>
 
+      <form asp-action="DeleteConfirm">
+        <div class="modal-body">          
+          <dl class="dl-horizontal">
+            
+              <input type="hidden" asp-for="Id"/>
+              <dt>
+                  Nome
+              </dt>
+              <dd>
+                  @Model.Nome
+              </dd>
+              <dt>
+                  Preço
+              </dt>
+              <dd>
+                  @Model.Preco
+              </dd>              
+          </dl>                     
         </div>
+
         <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-      </div>
+          <input type="submit" value="Delete" class="btn btn-danger" />
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

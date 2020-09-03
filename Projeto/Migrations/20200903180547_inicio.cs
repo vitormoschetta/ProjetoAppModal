@@ -52,11 +52,10 @@ namespace Projeto.Migrations
                 name: "Cliente",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
+                    Nome = table.Column<string>(nullable: true),
                     DataNascimento = table.Column<DateTime>(nullable: true),
-                    Cpf = table.Column<string>(nullable: false)
+                    Cpf = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -67,8 +66,7 @@ namespace Projeto.Migrations
                 name: "Produto",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
                     Nome = table.Column<string>(nullable: true),
                     Preco = table.Column<decimal>(nullable: false)
                 },

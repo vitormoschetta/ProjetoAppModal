@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -26,9 +27,8 @@ namespace Projeto.Controllers
         }
 
         public IActionResult Create()
-        {           
-            Produto modelo = new Produto();
-            return PartialView("_Create", modelo);            
+        {                       
+            return PartialView("_Create");            
         }
 
 
@@ -43,7 +43,7 @@ namespace Projeto.Controllers
 
 
 
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(Guid id)
         {
             var modelo =await _context.Produto.SingleAsync(x => x.Id == id);
             return PartialView("_Edit", modelo);
@@ -51,7 +51,7 @@ namespace Projeto.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, Produto modelo)
+        public async Task<IActionResult> Edit(Guid id, Produto modelo)
         {   
             if (id != modelo.Id) return NotFound();
 
@@ -74,7 +74,7 @@ namespace Projeto.Controllers
      
 
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {    
             var modelo =await _context.Produto.SingleAsync(x => x.Id == id);
             if (modelo == null) return NotFound();            
@@ -84,7 +84,7 @@ namespace Projeto.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> DeleteConfirm(int id)
+        public async Task<IActionResult> DeleteConfirm(Guid id)
         {
             var modelo =await _context.Produto.SingleAsync(x => x.Id == id);
             _context.Produto.Remove(modelo);
@@ -94,7 +94,7 @@ namespace Projeto.Controllers
 
 
         
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(Guid id)
         {         
             var modelo =await _context.Produto.SingleAsync(m => m.Id == id);
                                 
@@ -104,8 +104,32 @@ namespace Projeto.Controllers
         }
 
 
+        public async Task<IActionResult> Paginacao(int? pageNumber)
+        {                            
+            var listaModelo = await _context.Produto.ToListAsync();  
+            int pageSize = 5;      
+            PaginatedList<Produto> ModelComPaginacao = PaginatedList<Produto>.Create(listaModelo, pageNumber ?? 1, pageSize);
+            return PartialView("_TabelaIndex", ModelComPaginacao);
+        }
+
+
+
+        public async Task<IActionResult> Search(int? pageNumber, string parametro)
+        {                            
+            var query = "select * from produto where nome like '%" + parametro + "%' ";
+            query += " or preco like '%" + parametro + "%' ";
+            var listaModelo = await _context.Produto.FromSqlRaw(query).ToListAsync();
+            int pageSize = 5;      
+            PaginatedList<Produto> ModelComPaginacao = PaginatedList<Produto>.Create(listaModelo, pageNumber ?? 1, pageSize);
+            return PartialView("_TabelaIndex", ModelComPaginacao);
+        }
+
+
+
+
+
               
-        private bool ModelExist(int id)
+        private bool ModelExist(Guid id)
         {
             return _context.Produto.Any(x => x.Id == id);
         }

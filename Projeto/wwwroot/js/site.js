@@ -1,29 +1,51 @@
 ﻿
 
-function Create(rota) {
-
-    var url = $("#"+rota).data("url");   
-
-    $.get(url, function (data)
-    {
+function Create(rota) {    
+    $.get(rota, function (data) {
         $("#carrega-modal").html(data);
         $('#modalCreate').modal('show');
     });  
 }
 
 
-function Delete(params, rota) {
+function Edit(id, url) {    
+    $.get(url, {id: id}, function (data) {
+        $("#carrega-modal").html(data);
+        $('#modalEdit').modal('show');
+    });  
+}
 
+
+function Delete(id, url) {
     $('#modalEdit').modal('hide');
-
-    var url = $("#"+rota).data("url"); 
-
-    $.get(url, {id: params}, function (data)
-    {
+    $.get(url, {id: id}, function (data) {
         $("#carrega-modal").html(data);
         $('#modalDelete').modal('show');
     });    
 }
+
+function Search(parametro, url) {    
+    $.get(url, {parametro: parametro}, function (data) {
+        $("#tabela-index").empty();
+        $("#tabela-index").html(data);        
+    });  
+}
+
+function Paginacao(pageNumber, url){   
+    $.get(url, {pageNumber:pageNumber}, function (data)
+    {
+        $("#tabela-index").empty();
+        $("#tabela-index").html(data);
+    })
+}
+
+
+
+
+
+
+
+
 
 
 function Details(params, rota) {
@@ -39,16 +61,6 @@ function Details(params, rota) {
 }
 
 
-function Edit(params, rota) {
-    
-    var url = $("#"+rota).data("url");  
-
-    $.get(url, {id: params}, function (data)
-    {
-        $("#carrega-modal").html(data);
-        $('#modalEdit').modal('show');
-    });  
-}
 
 
 function Perfis(params, rota) {
@@ -77,7 +89,9 @@ function BuscaDinamica(texto, rota, params) {
 }
 
 
-function Paginacao(pageNumber, rotaTexto, params, rota){
+
+
+function PaginacaoDinamica(pageNumber, rotaTexto, params, rota){
     var url = $("#"+rota).data("url"); 
     params = $("#"+params).val();
     var texto = $("#"+rotaTexto).val();

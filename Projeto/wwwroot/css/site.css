@@ -71,3 +71,9 @@ body {
 }
 
 
+.form-search {
+  background-color: white; 
+  border-radius:5px;
+  border-color: white; 
+  float: right;  
+}

@@ -10,6 +10,7 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Projeto.Util;
+using System;
 
 namespace Projeto.Controllers
 {
@@ -65,21 +66,21 @@ namespace Projeto.Controllers
             return "false";
         }
 
-        public async Task<string> CpfExistsEdit(int Id, string Cpf)
+        public async Task<string> CpfExistsEdit(Guid id, string Cpf)
         {
             var result = "true";
             //var modelo = await _context.Cliente.SingleOrDefaultAsync(x => x.Cpf == Cpf);
             var lista = await _context.Cliente.Where(x => x.Cpf == Cpf).ToListAsync();
             if (lista.Count() < 1 ) result = "false";
             if (lista.Count() == 1){
-                if(lista[0].Id == Id) result = "false";
+                if(lista[0].Id == id) result = "false";
                 else result = "true";
             }         
             return result;           
         }
 
 
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(Guid id)
         {
             var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
             return PartialView("_EditExists", modelo);
@@ -87,7 +88,7 @@ namespace Projeto.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, Cliente modelo)
+        public async Task<IActionResult> Edit(Guid id, Cliente modelo)
         {
             if (id != modelo.Id) return NotFound();
 
@@ -112,7 +113,7 @@ namespace Projeto.Controllers
 
 
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
             if (modelo == null) return NotFound();
@@ -122,7 +123,7 @@ namespace Projeto.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> DeleteConfirm(int id)
+        public async Task<IActionResult> DeleteConfirm(Guid id)
         {
             var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
             _context.Cliente.Remove(modelo);
@@ -132,7 +133,7 @@ namespace Projeto.Controllers
 
 
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(Guid id)
         {
             var modelo = await _context.Cliente.SingleAsync(m => m.Id == id);
 
@@ -152,7 +153,7 @@ namespace Projeto.Controllers
             return PartialView("_TabelaIndex", ModelComPaginacao);
         }
 
-        private bool ModelExist(int id)
+        private bool ModelExist(Guid id)
         {
             return _context.Cliente.Any(x => x.Id == id);
         }

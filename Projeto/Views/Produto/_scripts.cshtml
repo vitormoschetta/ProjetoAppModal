@@ -1,0 +1,28 @@
+<script>
+
+    function CadastrarProduto() {
+        var url = '@Url.Action("Create","Produto")';
+        Create(url);        
+    }
+
+    function EditarProduto(id) {
+        var url = '@Url.Action("Edit","Produto")';
+        Edit(id, url);
+    }
+
+    function DeletarProduto(id) {
+        var url = '@Url.Action("Delete","Produto")';
+        Delete(id, url);
+    }
+
+    function PaginacaoProduto(pageNumber) {
+        var url = '@Url.Action("Paginacao","Produto")'; 
+        Paginacao(pageNumber, url);
+    }
+
+    function ProcurarProduto(parametro) {
+        var url = '@Url.Action("Search","Produto")';         
+        Search(parametro, url);
+    }
+    
+</script>

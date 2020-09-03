@@ -5,13 +5,9 @@ namespace Projeto.Models
 {
     public class Cliente
     {
-        public int Id { get; set; }
-
-        [Required(ErrorMessage = "O campo Nome é obrigatório.")]
+        public Guid Id { get; set; }        
         public string Nome { get; set; }
-        public DateTime? DataNascimento { get; set; }
-
-        [Required(ErrorMessage = "O campo CPF é obrigatório.")]
+        public DateTime? DataNascimento { get; set; }        
         public string Cpf { get; set; }
     }
 }
