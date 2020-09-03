@@ -1,0 +1,29 @@
+@model Projeto.Models.Usuario
+
+<div class="modal fade" id="modalDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Detalhes</h5>
+      </div>
+
+      <div class="modal-body">
+          
+            <dl class="dl-horizontal">
+                <dt>Nome</dt>
+                <dd>@Model.UserName</dd>
+
+                <dt>Status</dt>
+                <dd>@Model.Status</dd>
+        
+            </dl>
+
+      </div>
+      <div class="modal-footer">
+          <button type="button" data-dismiss="modal"  style="background-color:white; border: none;">
+            <i class="fa fa-window-close-o fa-4x" aria-hidden="true"></i>
+          </button>
+      </div>
+    </div>
+  </div>
+</div>

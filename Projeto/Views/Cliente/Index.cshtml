@@ -1,0 +1,36 @@
+
+
+<div class="navbar-right" id="btn-create-cliente" data-url="@Url.Action("Create","Cliente")">
+    <button onclick="Create('btn-create-cliente')" style="background-color:white; border: none;">
+        <i class="fa fa-plus-square-o fa-4x" style="color: #17A2B8; text-align:right"></i>
+    </button>    
+</div>
+
+<div class="row">
+    <label class="control-label">Consultar por:</label>
+    <section class="col col-md-2">                
+        <select class="form-control" id="parametro-cliente">
+            <option value="Nome">Nome</option>
+            <option value="DataNascimento">Data</option>
+        </select>
+    </section>
+    <section class="col col-md-5">
+        <input type="text" id="busca-dinamica-cliente" data-url="@Url.Action("BuscaDinamica","Cliente")" class="form-control" placeholder="Consulta Dinâmica" onkeyup="BuscaDinamica(this.value, 'busca-dinamica-cliente', 'parametro-cliente')"/>
+    </section>           
+</div>
+
+
+
+<!-- ======== ID DE MODALS CHAMADAS NO ARQUIVO 'menu.js' =============================-->
+
+<div id="carrega-modal"></div>
+
+
+
+<div id="tabela-index">
+    <partial name="_TabelaIndex" />
+</div>
+
+
+<partial name="_Scripts" />
+

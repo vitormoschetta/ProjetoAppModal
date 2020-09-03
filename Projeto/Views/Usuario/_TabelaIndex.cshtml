@@ -1,0 +1,44 @@
+@model IEnumerable<Projeto.Models.Usuario>
+
+<!--========== ESSA TABELA É CHAMADA NO FORMULARIO Menu/Index  -->
+<table class="table table-hover table-sm">   
+    <thead>     
+        <tr>         
+            <th>Email</th>
+            <th>Status</th>    
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+                    
+            // ==================================== LINHA CORPO DA TABELA ===========================================-->
+            <tr>             
+                <td>@item.Email</td>
+                <td>@item.Status </td>
+                <td>
+                    <a  style="margin-right: 2em;" href="#" id="btn-details-usuario" data-url="@Url.Action("Details","Usuario")" onclick="Details('@item.Id', 'btn-details-usuario')" style="color:green">
+                        <i class="fa fa-info-circle fa-lg" style="color: #17A2B8;"></i>
+                    </a>                     
+
+                    <a  style="margin-right: 2em;" href="#" id="btn-edit-usuario" data-url="@Url.Action("Edit","Usuario")" onclick="Edit('@item.Id','btn-edit-usuario')">
+                        <i class="fa fa-edit fa-lg" style="color: #17A2B8;"></i>                    
+                    </a> 
+
+                    <a  style="margin-right: 2em;" href="#" id="btn-delete-usuario" data-url="@Url.Action("Delete","Usuario")" onclick="Delete('@item.Id', 'btn-delete-usuario')" style="color:red">
+                        <i class="fa fa-trash fa-lg" style="color: #AD3E48;"></i>
+                    </a>       
+
+                    <a  style="margin-right: 2em;" href="#" id="btn-perfis-usuario" data-url="@Url.Action("Perfis","Usuario")" onclick="Perfis('@item.Id', 'btn-perfis-usuario')" style="color:green">
+                        Perfil
+                    </a>           
+                </td>
+            </tr>
+        }
+    
+    </tbody>
+</table>
+

@@ -1,0 +1,60 @@
+@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole> 
+
+<div class="modal fade" id="modalPerfis" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Perfis</h5>
+
+      </div>
+      <div class="modal-body">
+
+
+        <form asp-action="Perfis">
+            <div class="form-horizontal">
+                <div id="btn-update-role" data-url="@Url.Action("AtualizarPerfil","Usuario")"></div>
+                @foreach (var role in Model)
+                {
+                    var marcado = false;
+                    @foreach (var perfilUsuario in ViewBag.PerfilUsuario )
+                    {
+                        if (perfilUsuario == role.Name)
+                        {
+                            marcado = true; 
+                        }                       
+                    }
+
+                    if (marcado == true)
+                    {
+                        <input type="checkbox" id="@role.Name" checked onclick="UpdateRole('@role.Name', '@ViewBag.UsuarioId', 'btn-update-role')" />
+                        @role.Name 
+                    }
+                    else
+                    {
+                        <input type="checkbox" id="@role.Name" onclick="UpdateRole('@role.Name', '@ViewBag.UsuarioId', 'btn-update-role')"/>
+                        @role.Name 
+                    }
+                                       
+                }
+
+
+            </div>
+        </form>
+
+        @section Scripts {
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        }
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal"  style="background-color:white; border: none;">
+              <i class="fa fa-window-close-o fa-4x" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+

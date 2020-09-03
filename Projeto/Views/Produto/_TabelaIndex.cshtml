@@ -1,0 +1,64 @@
+@using Projeto.Util
+@model PaginatedList<Projeto.Models.Produto>
+
+<!--========== ESSA TABELA É CHAMADA NO FORMULARIO Menu/Index  -->
+<table class="table table-hover table-sm">   
+    <thead>     
+        <tr>
+            <th>Nome</th>           
+            <th>Preco</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+                    
+            // ==================================== LINHA CORPO DA TABELA ===========================================-->
+            <tr>
+                <td>@item.Nome</td>                    
+                <td>@item.Preco</td>
+                <td>
+                    <a style="margin-right: 2em;" href="#" id="btn-details-produto" data-url="@Url.Action("Details","Produto")" onclick="Details(@item.Id, 'btn-details-produto')" style="color:green">
+                        <i class="fa fa-info-circle fa-lg" style="color: #17A2B8;"></i>
+                    </a> 
+
+                    <a style="margin-right: 2em;" href="#" id="btn-edit-produto" data-url="@Url.Action("Edit","Produto")" onclick="Edit(@item.Id,'btn-edit-produto')">
+                        <i class="fa fa-edit fa-lg" style="color: ##1D9C73;"></i>
+                    </a> 
+                    
+                    <a href="#" id="btn-delete-produto" data-url="@Url.Action("Delete","Produto")" onclick="Delete(@item.Id, 'btn-delete-produto')" style="color:red">
+                        <i class="fa fa-trash fa-lg" style="color: #AD3E48;"></i>
+                    </a>                 
+                </td>
+            </tr>
+        }
+    
+    </tbody>
+</table>
+
+
+
+
+<!-- ////////////////// Controle de paginação ///////////////////////-->
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";   
+    var prev = Model.PageIndex - 1;
+    var next = Model.PageIndex + 1;        
+}
+
+<br />
+<div style="margin-left: 3em;">
+    Página @Model.PageIndex de @Model.TotalPages
+</div>
+
+<div id='paginacao-produto' data-url="@Url.Action("BuscaDinamica","Produto")"></div>
+<a href="#" onclick="Paginacao(@prev, 'busca-dinamica-produto', 'parametro-produto', 'paginacao-produto')" class="btn btn-default @prevDisabled">
+    <i class="fa fa-chevron-left" aria-hidden="true"></i> Voltar
+</a>
+<a href="#" onclick="Paginacao(@next, 'busca-dinamica-produto', 'parametro-produto', 'paginacao-produto')" class="btn btn-default @nextDisabled">
+    Próximo <i class="fa fa-chevron-right" aria-hidden="true"></i>  
+</a>

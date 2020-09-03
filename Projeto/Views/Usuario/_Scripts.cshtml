@@ -1,0 +1,22 @@
+<script>
+      
+    function UpdateRole(role, usuario, rota){
+        
+
+        var acao = "adicionar";
+        if (document.getElementById(role).checked == false)    
+            acao = "remover";
+        
+        var url = $("#"+rota).data("url");  
+
+        $.get(url, {usuarioId:usuario, roleName:role, acao:acao}, function (data)
+        {
+            alert("Perfil Atualizado");
+        })
+        .fail(function() {
+            alert( "Não foi possível atualizar o perfil." );
+        });      
+        
+    }
+
+</script>

@@ -1,0 +1,58 @@
+@using Microsoft.AspNetCore.Identity
+@model IdentityRole
+
+
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="background-color:">
+
+      <form asp-action="Edit">
+
+          <div class="modal-header">      
+              <div style="margin-right: 1em;">
+                  <button type="submit" style="background-color:white; border: none;">
+                      <i class="fa fa-save fa-3x" style="color: #2059bc;" aria-hidden="true"></i>
+                  </button>
+              </div>
+
+              <div style="margin-right: 1em;">
+                  <button type="button" style="background-color:white; border: none;" onclick="EditIcon()">
+                      <i class="fa fa-edit fa-3x" style="color:black"></i>
+                  </button>  
+              </div>              
+
+              <div>
+                  <button type="submit" asp-action="DeleteConfirm" asp-rout-id="@Model.Id"  style="background-color:white; border: none;"> 
+                      <i class="fa fa-trash fa-3x" style="color: #AD3E48;"></i>
+                  </button>                
+              </div>
+
+              <button type="button" class="close" data-dismiss="modal" aria-label="Fechar" style="background-color:white; border: none;">
+                    <i class="fa fa-window-close-o fa-2x" aria-hidden="true"></i>
+              </button>
+          </div>
+
+          
+          <div class="modal-body">
+            
+              <div class="form-horizontal">
+                  <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                  <input type="hidden" asp-for="Id" />
+
+                  <div class="form-group row">
+                      <label class="col-md-2 control-label">Nome</label>
+                      <div class="col-md-10">
+                          <input type="Text" asp-for="Name" class="form-control" readonly/>
+                      </div>
+                  </div>                     
+
+              </div>
+          
+          </div>
+
+      </form>
+      
+    </div>
+  </div>
+</div>

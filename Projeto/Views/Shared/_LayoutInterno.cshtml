@@ -1,0 +1,108 @@
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Http
+@inject SignInManager<Usuario> SignInManager
+@inject UserManager<Usuario> UserManager
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Relota</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="~/interno/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="~/interno/css/simple-sidebar.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.css" />
+
+</head>
+
+<body>
+
+  <div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="sidebar-heading bg-info text-white" style="font-weight: bold;">SEDUC - CTIC</div>
+
+      <div class="list-group list-group-flush">
+
+          @{var usuario = await UserManager.FindByNameAsync(User.Identity.Name); }
+      
+          @await Component.InvokeAsync("Menu", new{perfil = usuario.Perfil})                
+                
+             
+      </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-info border-bottom">
+        
+        <button class="btn btn-info" id="menu-toggle">
+          <i class="fa fa-bars" aria-hidden="true"></i>
+        </button>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+             <li class="nav-item">
+              <a class="nav-link" style="color: white;" href="#">@Context.Session.GetString("PerfilNome")</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link text-white"  asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity.Name</a>
+            </li>           
+            <li class="nav-item dropdown">
+              <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                  <button  type="submit" class="nav-link btn btn-link text-white" style="color: white;">Sair</button>
+              </form>
+            </li>
+          </ul> 
+        </div>
+      </nav>
+
+      <div class="container-fluid">
+        @RenderBody()
+      </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="~/interno/vendor/jquery/jquery.min.js"></script>
+  <script src="~/interno/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- ações dos botões create, edit, delete, etcc -->
+  <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+  @RenderSection("Scripts", required: false)
+
+  
+
+  <!-- Menu Toggle Script -->
+  <script>
+    $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole>
+
+<style>
+    .table-hover thead tr:hover th, .table-hover tbody tr:hover td {
+    background-color: #DAE0E5;
+}
+</style>
+
+<!--========== ESSA TABELA É CHAMADA NO FORMULARIO Menu/Index  -->
+<table class="table table-hover table-sm">   
+    <thead>     
+        <tr>
+            <th>Nome</th>           
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+                    
+            // ==================================== LINHA CORPO DA TABELA ===========================================-->
+            <tr style="cursor: pointer" onclick="Edit('@item.Id','btn-edit-perfil')" id="btn-edit-perfil" data-url="@Url.Action("Edit","Perfil")">
+                <td>@item.Name</td>                    
+             
+            </tr>
+        }
+    
+    </tbody>
+</table>
+
+
+

@@ -1,0 +1,49 @@
+@using Microsoft.AspNetCore.Http;
+
+<br />
+
+<div class="form-row">
+    <div class="col-5">
+        <input type="text" id="busca-dinamica-cliente" data-url="@Url.Action("BuscaDinamica","Produto")" class="form-control" placeholder="Consulta Dinâmica" onkeyup="BuscaDinamica(this.value, 'busca-dinamica-cliente', 'parametro-cliente')"/>
+    </div>        
+
+    <div class="col-5" id="btn-create-produto" data-url="@Url.Action("Create","Produto")">
+        <a href="#" onclick="Create('btn-create-produto')">
+            <i class="fa fa-plus-square fa-3x" style="color: #17A2B8; text-align:right"></i>
+        </a>    
+    </div>
+</div>
+
+
+
+<!-- ======== ID DE MODALS CHAMADAS NO ARQUIVO 'menu.js' =============================-->
+<div id="carrega-modal"></div>
+
+
+
+<div id="tabela-index">
+    @await Html.PartialAsync("_TabelaIndex")
+</div>
+
+
+
+
+
+
+<!-- VueJS-->   
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<div id="app" style="margin-top: 200px;">
+    {{variavel}}
+</div>
+
+
+<script>
+    new Vue({
+            el: "#app",
+            data: {
+                variavel: 0
+            }
+        })      
+</script>
+

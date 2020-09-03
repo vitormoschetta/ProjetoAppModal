@@ -1,0 +1,42 @@
+@using Microsoft.AspNetCore.Identity
+@model IdentityRole
+
+<div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+
+       <form asp-action="Create">
+
+          <div class="modal-header">      
+             <div style="margin-right: 1em;">
+                  <button type="submit" style="background-color:white; border: none;">
+                      <i class="fa fa-save fa-3x" style="color: #2059bc;" aria-hidden="true"></i>
+                  </button>
+              </div>
+
+        
+              <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"  style="background-color:white; border: none;">
+                  <i class="fa fa-window-close-o fa-2x" aria-hidden="true"></i>
+              </button>
+            </div>
+
+            <div class="modal-body">
+
+       
+                <div class="form-horizontal">      
+
+                    <div class="form-group row">
+                        <label class="col-md-2 control-label">Nome</label>
+                        <div class="col-md-10">
+                            <input type="Text" asp-for="Name"  class="form-control" />
+                        </div>
+                    </div>                                                                    
+
+                </div>
+        </form>
+
+        </div>
+
+    </div>
+  </div>
+</div>
