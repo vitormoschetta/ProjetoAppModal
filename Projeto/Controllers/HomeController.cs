@@ -33,7 +33,7 @@ namespace Projeto.Controllers
                     case "Usuario":
                         return RedirectToAction("Index", "Produto");                  
                     default:
-                        return RedirectToAction("Index", "Usuario");
+                        return RedirectToAction("Index", "Produto");
                 }       
       
             }
