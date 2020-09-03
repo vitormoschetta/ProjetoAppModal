@@ -42,7 +42,7 @@ namespace Projeto.Controllers
 
         public IActionResult Create()
         {
-            return PartialView("_CreateExists", new Cliente());
+            return PartialView("_Create");
         }
 
 
@@ -83,7 +83,7 @@ namespace Projeto.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
-            return PartialView("_EditExists", modelo);
+            return PartialView("_Edit", modelo);
         }
 
 
@@ -141,6 +141,25 @@ namespace Projeto.Controllers
 
             return PartialView("_Details", modelo);
         }
+
+        public async Task<IActionResult> Paginacao(int? pageNumber)
+        {                            
+            var listaModelo = await _context.Cliente.ToListAsync();  
+            int pageSize = 5;      
+            PaginatedList<Cliente> ModelComPaginacao = PaginatedList<Cliente>.Create(listaModelo, pageNumber ?? 1, pageSize);
+            return PartialView("_TabelaIndex", ModelComPaginacao);
+        }
+
+        public async Task<IActionResult> Search(int? pageNumber, string parametro)
+        {                            
+            var query = "select * from cliente where nome like '%" + parametro + "%' ";
+            query += " or cpf like '%" + parametro + "%' ";
+            var listaModelo = await _context.Cliente.FromSqlRaw(query).ToListAsync();
+            int pageSize = 5;      
+            PaginatedList<Cliente> ModelComPaginacao = PaginatedList<Cliente>.Create(listaModelo, pageNumber ?? 1, pageSize);
+            return PartialView("_TabelaIndex", ModelComPaginacao);
+        }
+
 
 
         [HttpPost]

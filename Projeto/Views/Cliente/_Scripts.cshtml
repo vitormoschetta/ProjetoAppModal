@@ -1,3 +1,33 @@
+<script>
+
+    function CadastrarCliente() {
+        var url = '@Url.Action("Create","Cliente")';
+        Create(url);        
+    }
+
+    function EditarCliente(id) {
+        var url = '@Url.Action("Edit","Cliente")';
+        Edit(id, url);
+    }
+
+    function DeletarCliente(id) {
+        var url = '@Url.Action("Delete","Cliente")';
+        Delete(id, url);
+    }
+
+    function PaginacaoCliente(pageNumber) {
+        var url = '@Url.Action("Paginacao","Cliente")'; 
+        Paginacao(pageNumber, url);
+    }
+
+    function ProcurarCliente(parametro) {
+        var url = '@Url.Action("Search","Cliente")';         
+        Search(parametro, url);
+    }
+    
+</script>
+
+
 <!-- CODIGO PASSIVEL DE MUDANÇA, POR ISSO NÃO ESTÁ CENTRALIZADO NO SITE.JS -->
 
 <script> 
