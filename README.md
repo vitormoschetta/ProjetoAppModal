@@ -1,5 +1,12 @@
 # ProjetoAppModal
-App responsivo criado em Asp.NET Core MVC com formulários baseados em Modal Bootstrap. Para a comunidade Asp.NET Core.
+
+App responsivo criado em Asp.NET Core MVC com um belo design de formulários.
+
+Uso de Repository Pattern e AutoMapper para mapeamento entre Models e ViewModels (modelo limpo).
+
+Autenticação com Identity Core. 
+
+Persistência com Entity Framework e leitura com Dapper. 
 
 ![alt text](Projeto/wwwroot/images/01.jpg?raw=true=250x250 "Title")
 
