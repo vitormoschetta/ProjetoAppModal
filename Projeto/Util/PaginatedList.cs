@@ -9,7 +9,7 @@ namespace Projeto.Util
     // Recebe um tipo QUALQUER de objeto e retorna com paginação
     public class PaginatedList<T> : List<T>
     {
-        public int PageIndex { get; private set; } 
+        public int PageIndex { get; private set; }
         public int TotalPages { get; private set; }
 
         // Metodo Construtor
@@ -17,11 +17,11 @@ namespace Projeto.Util
         // count => quantidade de itens na lista
         public PaginatedList(List<T> items, int count, int pageIndex, int pagSize)
         {
-            PageIndex = pageIndex;            
+            PageIndex = pageIndex;
             TotalPages = (int)Math.Ceiling(count / (double)pagSize); // Ceiling => arredonda pra baixo            
             this.AddRange(items);
         }
-        
+
         public bool HasPreviousPage
         {
             get

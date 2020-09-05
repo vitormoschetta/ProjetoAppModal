@@ -6,38 +6,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projeto.Data;
 using Projeto.Models;
+using Projeto.Repository;
 using Projeto.Util;
+using Projeto.ViewModels;
 
 namespace Projeto.Controllers
 {
-    public class ProdutoController: Controller
+    public class ProdutoController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        public ProdutoController(ApplicationDbContext context)
+        private readonly ProdutoRepository _repository;
+        public ProdutoController(ProdutoRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<IActionResult> Index(int? pageNumber)
         {
-            var listaModelo = await _context.Produto.ToListAsync();    
-            int pageSize = 5; // itens por pagina
-            PaginatedList<Produto> ModelComPaginacao = PaginatedList<Produto>.Create(listaModelo, pageNumber ?? 1, pageSize);
-            return View(ModelComPaginacao);    
-        }
-
-        public IActionResult Create()
-        {                       
-            return PartialView("_Create");            
+            if (pageNumber == null) pageNumber = 1;
+            var listaModelo = await _repository.BuscarTodos(pageNumber);
+            return View(listaModelo);
         }
 
 
-    
+        public IActionResult Create() => PartialView("_Create");
+
         [HttpPost]
-        public async Task<IActionResult> Create(Produto modelo)
+        public async Task<IActionResult> Create(ProdutoViewModel modelo)
         {
-            _context.Add(modelo);
-            await _context.SaveChangesAsync();
+            var result = await _repository.Cadastrar(modelo);
             return RedirectToAction("Index");
         }
 
@@ -45,40 +41,42 @@ namespace Projeto.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var modelo =await _context.Produto.SingleAsync(x => x.Id == id);
+            var modelo = await _repository.BuscarPorId(id);
             return PartialView("_Edit", modelo);
         }
 
 
         [HttpPost]
         public async Task<IActionResult> Edit(Guid id, Produto modelo)
-        {   
-            if (id != modelo.Id) return NotFound();
-
-            if (!ModelState.IsValid) return NotFound();
-
-            
-            try{
-                _context.Update(modelo);
-                await _context.SaveChangesAsync();                                                                               
+        {
+            if (id != modelo.Id)
+            {
+                ModelState.AddModelError(string.Empty, "Identificador inválido.");
+                return View(modelo);
             }
-            catch (DbUpdateConcurrencyException){
-                if (!ModelExist(modelo.Id))
-                    return NotFound();
-                else
-                    throw;
+
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Modelo inválido.");
+                return View(modelo);
             }
-            return RedirectToAction("Index");                                   
+
+            var result = await _repository.Atualizar(modelo);
+            if (result != true)
+            {
+                ModelState.AddModelError(string.Empty, "Erro Interno.");
+                return View(modelo);
+            }
+
+            return RedirectToAction("Index");
         }
 
-     
+
 
 
         public async Task<IActionResult> Delete(Guid id)
-        {    
-            var modelo =await _context.Produto.SingleAsync(x => x.Id == id);
-            if (modelo == null) return NotFound();            
-
+        {
+            var modelo = await _repository.BuscarPorId(id);
             return PartialView("_Delete", modelo);
         }
 
@@ -86,52 +84,32 @@ namespace Projeto.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteConfirm(Guid id)
         {
-            var modelo =await _context.Produto.SingleAsync(x => x.Id == id);
-            _context.Produto.Remove(modelo);
-            await _context.SaveChangesAsync();
+            var result = await _repository.Excluir(id);
+
+            if (result != true)
+            {
+                ModelState.AddModelError(string.Empty, "Erro Interno.");
+                return View();
+            }
+
             return RedirectToAction("Index");
         }
 
 
-        
-        public async Task<IActionResult> Details(Guid id)
-        {         
-            var modelo =await _context.Produto.SingleAsync(m => m.Id == id);
-                                
-            if (modelo == null) return NotFound();            
-
-            return PartialView("_Details", modelo);
-        }
-
-
         public async Task<IActionResult> Paginacao(int? pageNumber)
-        {                            
-            var listaModelo = await _context.Produto.ToListAsync();  
-            int pageSize = 5;      
-            PaginatedList<Produto> ModelComPaginacao = PaginatedList<Produto>.Create(listaModelo, pageNumber ?? 1, pageSize);
-            return PartialView("_TabelaIndex", ModelComPaginacao);
+        {
+            if (pageNumber == null) pageNumber = 1;
+            var listaModelo = await _repository.BuscarTodos(pageNumber);
+            return PartialView("_TabelaIndex", listaModelo);
         }
 
 
 
         public async Task<IActionResult> Search(int? pageNumber, string parametro)
-        {                            
-            var query = "select * from produto where nome like '%" + parametro + "%' ";
-            query += " or preco like '%" + parametro + "%' ";
-            var listaModelo = await _context.Produto.FromSqlRaw(query).ToListAsync();
-            int pageSize = 5;      
-            PaginatedList<Produto> ModelComPaginacao = PaginatedList<Produto>.Create(listaModelo, pageNumber ?? 1, pageSize);
-            return PartialView("_TabelaIndex", ModelComPaginacao);
-        }
-
-
-
-
-
-              
-        private bool ModelExist(Guid id)
         {
-            return _context.Produto.Any(x => x.Id == id);
+            var listaModelo = await _repository.Procurar(pageNumber, parametro);
+            return PartialView("_TabelaIndex", listaModelo);
         }
+
     }
 }

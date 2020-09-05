@@ -10,8 +10,8 @@ using Projeto.Data;
 namespace Projeto.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200903180547_inicio")]
-    partial class inicio
+    [Migration("20200905003628_inicio02.")]
+    partial class inicio02
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -162,7 +162,7 @@ namespace Projeto.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DataNascimento")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");

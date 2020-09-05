@@ -1,6 +1,11 @@
 @using Projeto.Util
 @model PaginatedList<Projeto.Models.Cliente>
 
+@{
+    DateTime DataNascimento = DateTime.Now;
+    var DataNascimentoString = string.Empty;
+}
+
 <!--========== ESSA TABELA É CHAMADA NO FORMULARIO Menu/Index  -->
 <table class="table table-hover table-sm">   
     <thead>     
@@ -13,21 +18,28 @@
     </thead>
 
     <tbody>
-
+        
         @foreach (var item in Model)
         {
+            if(item.DataNascimento != null) {
+                DataNascimento = Convert.ToDateTime(item.DataNascimento);
+                DataNascimentoString = DataNascimento.ToString("dd/MM/yyyy");
+            }
+            else {
+                DataNascimentoString = string.Empty;
+            }
                     
             // ==================================== LINHA CORPO DA TABELA ===========================================-->
             <tr>
                 <td>@item.Nome</td>            
                 <td>@item.Cpf</td>        
-                <td>@item.DataNascimento</td>
+                <td>@DataNascimentoString</td>
                 <td>
-                    <a href="#" onclick="EditarCliente('@item.Id')" style="margin-right: 2em;" >
+                    <a href="@Url.Action("Edit","Cliente", new { id = @item.Id } )" style="margin-right: 2em;" >
                         <i class="fa fa-edit fa-lg" style="color: ##1D9C73;"></i>
                     </a> 
                     
-                    <a href="#" onclick="DeletarCliente('@item.Id')">
+                    <a href="@Url.Action("Delete","Cliente", new { id = @item.Id } )" >
                         <i class="fa fa-trash fa-lg" style="color: #AD3E48;"></i>
                     </a>                 
                 </td>

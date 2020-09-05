@@ -1,0 +1,50 @@
+@model Projeto.ViewModels.ClienteViewModel
+
+<div class="card">                   
+  <div class="card-body"> 
+
+    <form asp-action="Create" method="POST">  
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>     
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="bmd-label-floating">
+                        <b>Cadastro de Cliente</b>
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="bmd-label-floating">Nome</label>
+                    <input type="text" asp-for="Nome"  class="form-control"/>
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="bmd-label-floating">CPF</label>
+                    <input type="text" asp-for="Cpf"  class="form-control"/>
+                    <span asp-validation-for="Cpf" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="bmd-label-floating">Data Nascimento</label>
+                    <input type="date" asp-for="DataNascimento"  class="form-control"/>
+                    <span asp-validation-for="DataNascimento" class="text-danger"></span>
+                </div>
+            </div>            
+        </div>
+        <div class="row" style="float: right;">
+            <input type="submit" value="Concluir" class="btn btn-info" />       
+            <a href="@Url.Action("Index","Cliente")" class="btn btn-secondary">Fechar</a>
+        </div>
+
+    </form>
+  </div>
+</div>
+            
+
+<partial name="_ValidationScriptsPartial">

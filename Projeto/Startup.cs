@@ -18,6 +18,9 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Projeto.Repository;
+using Projeto.ViewModels;
+using AutoMapper;
 
 namespace Projeto
 {
@@ -33,17 +36,20 @@ namespace Projeto
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<Usuario, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddDefaultTokenProviders()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-                
+
             services.AddControllersWithViews();
 
             services.AddRazorPages();
+
+            services.AddScoped<ProdutoRepository>();
+            services.AddScoped<ClienteRepository>();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -73,8 +79,20 @@ namespace Projeto
                 options.IdleTimeout = TimeSpan.FromMinutes(20);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
-            });           
-            
+            });
+
+
+            // AutoMapper
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ProdutoViewModel, Produto>();
+                cfg.CreateMap<Produto, ProdutoViewModel>();
+                cfg.CreateMap<ClienteViewModel, Cliente>();
+                cfg.CreateMap<Cliente, ClienteViewModel>();
+            });
+            IMapper mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
+
         }
 
 

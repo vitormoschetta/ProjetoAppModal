@@ -11,102 +11,74 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Projeto.Util;
 using System;
+using Projeto.Repository;
+using Projeto.ViewModels;
 
 namespace Projeto.Controllers
 {
     public class ClienteController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IConfiguration _configuration;
-        public ClienteController(ApplicationDbContext context, IConfiguration configuration)
+        private readonly ClienteRepository _repository;
+        public ClienteController(ClienteRepository repository)
         {
-            _configuration = configuration;
-            _context = context;
+            _repository = repository;
         }
-
-        // Using Dapper se for preciso
-        public string GetConnection()
-        {
-            var connection = _configuration.GetSection("ConnectionStrings").GetSection("DefaultConnection").Value;
-            return connection;
-        }
-
 
         public async Task<IActionResult> Index(int? pageNumber)
         {
-            var listaModelo = await _context.Cliente.ToListAsync();          
-            int pageSize = 5; // itens por pagina
-            PaginatedList<Cliente> ModelComPaginacao = PaginatedList<Cliente>.Create(listaModelo, pageNumber ?? 1, pageSize);
-            return View(ModelComPaginacao);
-        }
-
-        public IActionResult Create()
-        {
-            return PartialView("_Create");
+            if (pageNumber == null) pageNumber = 1;
+            var listaModelo = await _repository.BuscarTodos(pageNumber);
+            return View(listaModelo);
         }
 
 
+        public IActionResult Create() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Create(Cliente modelo)
-        {            
-            if (!ModelState.IsValid){
-                return NotFound();
-            } 
-          
-            _context.Add(modelo);
-            await _context.SaveChangesAsync();
+        public async Task<IActionResult> Create(ClienteViewModel modelo)
+        {
+            if (!ModelState.IsValid) return View(modelo);
+
+            var result = await _repository.Cadastrar(modelo);
+            if (result.Valido == false)
+            {
+                ModelState.AddModelError(string.Empty, result.Mensagem);
+                return View(modelo);
+            }
             return RedirectToAction("Index");
         }
 
-        public async Task<string> CpfExistsCreate(string Cpf)
-        {
-            var modelo = await _context.Cliente.SingleOrDefaultAsync(x => x.Cpf == Cpf);
-            if (modelo != null) return "true";
-            return "false";
-        }
-
-        public async Task<string> CpfExistsEdit(Guid id, string Cpf)
-        {
-            var result = "true";
-            //var modelo = await _context.Cliente.SingleOrDefaultAsync(x => x.Cpf == Cpf);
-            var lista = await _context.Cliente.Where(x => x.Cpf == Cpf).ToListAsync();
-            if (lista.Count() < 1 ) result = "false";
-            if (lista.Count() == 1){
-                if(lista[0].Id == id) result = "false";
-                else result = "true";
-            }         
-            return result;           
-        }
 
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
-            return PartialView("_Edit", modelo);
+            var modelo = await _repository.BuscarPorId(id);
+            return View(modelo);
         }
 
 
         [HttpPost]
         public async Task<IActionResult> Edit(Guid id, Cliente modelo)
         {
-            if (id != modelo.Id) return NotFound();
-
-            if (!ModelState.IsValid) return NotFound();
-
-
-            try
+            if (id != modelo.Id)
             {
-                _context.Update(modelo);
-                await _context.SaveChangesAsync();
+                ModelState.AddModelError(string.Empty, "Identificador inválido.");
+                return View(modelo);
             }
-            catch (DbUpdateConcurrencyException)
+
+            if (!ModelState.IsValid)
             {
-                if (!ModelExist(modelo.Id))
-                    return NotFound();
-                else
-                    throw;
+                ModelState.AddModelError(string.Empty, "Modelo inválido.");
+                return View(modelo);
             }
+
+            var result = await _repository.Atualizar(modelo);
+            if (result != true)
+            {
+                ModelState.AddModelError(string.Empty, "Erro Interno.");
+                return View(modelo);
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -115,84 +87,40 @@ namespace Projeto.Controllers
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
-            if (modelo == null) return NotFound();
-
-            return PartialView("_Delete", modelo);
+            var modelo = await _repository.BuscarPorId(id);
+            return View(modelo);
         }
 
 
         [HttpPost]
         public async Task<IActionResult> DeleteConfirm(Guid id)
         {
-            var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
-            _context.Cliente.Remove(modelo);
-            await _context.SaveChangesAsync();
+            var result = await _repository.Excluir(id);
+
+            if (result != true)
+            {
+                ModelState.AddModelError(string.Empty, "Erro Interno.");
+                return View();
+            }
+
             return RedirectToAction("Index");
         }
 
 
-
-        public async Task<IActionResult> Details(Guid id)
-        {
-            var modelo = await _context.Cliente.SingleAsync(m => m.Id == id);
-
-            if (modelo == null) return NotFound();
-
-            return PartialView("_Details", modelo);
-        }
-
         public async Task<IActionResult> Paginacao(int? pageNumber)
-        {                            
-            var listaModelo = await _context.Cliente.ToListAsync();  
-            int pageSize = 5;      
-            PaginatedList<Cliente> ModelComPaginacao = PaginatedList<Cliente>.Create(listaModelo, pageNumber ?? 1, pageSize);
-            return PartialView("_TabelaIndex", ModelComPaginacao);
+        {
+            if (pageNumber == null) pageNumber = 1;
+            var listaModelo = await _repository.BuscarTodos(pageNumber);
+            return PartialView("_TabelaIndex", listaModelo);
         }
+
+
 
         public async Task<IActionResult> Search(int? pageNumber, string parametro)
-        {                            
-            var query = "select * from cliente where nome like '%" + parametro + "%' ";
-            query += " or cpf like '%" + parametro + "%' ";
-            var listaModelo = await _context.Cliente.FromSqlRaw(query).ToListAsync();
-            int pageSize = 5;      
-            PaginatedList<Cliente> ModelComPaginacao = PaginatedList<Cliente>.Create(listaModelo, pageNumber ?? 1, pageSize);
-            return PartialView("_TabelaIndex", ModelComPaginacao);
-        }
-
-
-
-        [HttpPost]
-        public async Task<IActionResult> BuscaDinamica(string texto, string parametro, int? pageNumber)
-        {            
-            if (texto == null) texto = "";         
-            var listaModelo = await _context.Cliente.FromSqlRaw("select * from cliente where " + parametro + " like '%" + texto + "%'").ToListAsync();  
-            int pageSize = 5;      
-            PaginatedList<Cliente> ModelComPaginacao = PaginatedList<Cliente>.Create(listaModelo, pageNumber ?? 1, pageSize);
-            return PartialView("_TabelaIndex", ModelComPaginacao);
-        }
-
-        private bool ModelExist(Guid id)
         {
-            return _context.Cliente.Any(x => x.Id == id);
+            var listaModelo = await _repository.Procurar(pageNumber, parametro);
+            return PartialView("_TabelaIndex", listaModelo);
         }
 
-
-
-        private async void DapperFunction()
-        {
-            using (var con = new SqlConnection(GetConnection()))
-            {
-                for (int i = 0; i < 50; i++)
-                {
-                    await con.ExecuteAsync("insert into cliente(nome, dataNascimento) values(@nome, @dataNascimento)", 
-                            new {nome = "vitor" + i.ToString(), dataNascimento = "28/05/1989"} );
-                }
-            }
-        }
-
-
-
-        
     }
 }

@@ -160,7 +160,7 @@ namespace Projeto.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DataNascimento")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
