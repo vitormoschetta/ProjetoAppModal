@@ -35,15 +35,15 @@ namespace Projeto.Controllers
         public IActionResult Create() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Create(ClienteViewModel modelo)
+        public async Task<IActionResult> Create(ClienteViewModel viewModel)
         {
-            if (!ModelState.IsValid) return View(modelo);
+            if (!ModelState.IsValid) return View(viewModel);
 
-            var result = await _repository.Cadastrar(modelo);
+            var result = await _repository.Cadastrar(viewModel);
             if (result.Valido == false)
             {
                 ModelState.AddModelError(string.Empty, result.Mensagem);
-                return View(modelo);
+                return View(viewModel);
             }
             return RedirectToAction("Index");
         }
@@ -52,31 +52,31 @@ namespace Projeto.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var modelo = await _repository.BuscarPorId(id);
-            return View(modelo);
+            var viewModel = await _repository.BuscarPorId(id);
+            return View(viewModel);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, Cliente modelo)
+        public async Task<IActionResult> Edit(Guid id, ClienteViewModel viewModel)
         {
-            if (id != modelo.Id)
+            if (id != viewModel.Id)
             {
                 ModelState.AddModelError(string.Empty, "Identificador inválido.");
-                return View(modelo);
+                return View(viewModel);
             }
 
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError(string.Empty, "Modelo inválido.");
-                return View(modelo);
+                return View(viewModel);
             }
 
-            var result = await _repository.Atualizar(modelo);
-            if (result != true)
+            var result = await _repository.Atualizar(viewModel);
+            if (result.Valido != true)
             {
-                ModelState.AddModelError(string.Empty, "Erro Interno.");
-                return View(modelo);
+                ModelState.AddModelError(string.Empty, result.Mensagem);
+                return View(viewModel);
             }
 
             return RedirectToAction("Index");
@@ -87,8 +87,8 @@ namespace Projeto.Controllers
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            var modelo = await _repository.BuscarPorId(id);
-            return View(modelo);
+            var viewModel = await _repository.BuscarPorId(id);
+            return View(viewModel);
         }
 
 
@@ -97,9 +97,9 @@ namespace Projeto.Controllers
         {
             var result = await _repository.Excluir(id);
 
-            if (result != true)
+            if (result.Valido != true)
             {
-                ModelState.AddModelError(string.Empty, "Erro Interno.");
+                ModelState.AddModelError(string.Empty, result.Mensagem);
                 return View();
             }
 

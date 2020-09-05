@@ -26,10 +26,10 @@ namespace Projeto.Repository
             var existe = await _context.Cliente.FirstOrDefaultAsync(x => x.Nome == viewModel.Nome || x.Cpf == viewModel.Cpf);
             if (existe != null) return new ErroViewModel(false, "Já existe um cadastro com estes parâmetros.");
 
-            var modelo = _mapper.Map<Cliente>(viewModel);
-
             try
             {
+                var modelo = _mapper.Map<Cliente>(viewModel);
+
                 _context.Add(modelo);
                 await _context.SaveChangesAsync();
                 return new ErroViewModel(true, string.Empty);
@@ -42,34 +42,40 @@ namespace Projeto.Repository
         }
 
 
-        public async Task<Cliente> BuscarPorId(Guid id) => await _context.Cliente.SingleAsync(x => x.Id == id);
+        public async Task<ClienteViewModel> BuscarPorId(Guid id)
+        {
+            var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
+            return _mapper.Map<ClienteViewModel>(modelo);
+        }
 
-        public async Task<dynamic> Atualizar(Cliente modelo)
+        public async Task<ErroViewModel> Atualizar(ClienteViewModel viewModel)
         {
             try
             {
+                var modelo = _mapper.Map<Cliente>(viewModel);
+
                 _context.Update(modelo);
                 await _context.SaveChangesAsync();
-                return true;
+                return new ErroViewModel(true, string.Empty);
             }
-            catch (System.Exception)
+            catch (Exception e)
             {
-                return false;
+                return new ErroViewModel(false, e.ToString());
             }
         }
 
-        public async Task<dynamic> Excluir(Guid id)
+        public async Task<ErroViewModel> Excluir(Guid id)
         {
             var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
             try
             {
                 _context.Remove(modelo);
                 await _context.SaveChangesAsync();
-                return true;
+                return new ErroViewModel(true, string.Empty);
             }
-            catch (System.Exception)
+            catch (Exception e)
             {
-                return false;
+                return new ErroViewModel(false, e.ToString());
             }
         }
 
