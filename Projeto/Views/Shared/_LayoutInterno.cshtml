@@ -44,7 +44,7 @@
 
           @{var usuario = await UserManager.FindByNameAsync(User.Identity.Name); }
       
-          @await Component.InvokeAsync("Menu", new{perfil = usuario.Perfil})                
+          @await Component.InvokeAsync("Menu", new { perfil = usuario.Perfil } )                
                 
              
       </div>

@@ -39,7 +39,12 @@ namespace Projeto.Repository
         }
 
 
-        public async Task<Produto> BuscarPorId(Guid id) => await _context.Produto.SingleAsync(x => x.Id == id);
+        public async Task<ProdutoViewModel> BuscarPorId(Guid id)
+        {
+            var modelo = await _context.Produto.SingleAsync(x => x.Id == id);
+            return _mapper.Map<ProdutoViewModel>(modelo);
+        }
+
 
         public async Task<dynamic> Atualizar(Produto modelo)
         {

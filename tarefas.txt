@@ -1,0 +1,12 @@
+01. Fazer todo o processo de Requeste da Entidade Produto via Ajax.
+    - Validações de formulário
+    - Método no controller de verificação de existência de produto ígual já cadastrado.
+
+02. Correções na Entidade Usuário
+    - View
+    - Atualizações de Perfil
+
+03. Adicionar Login Externo
+
+04. Recuperação de senha
+

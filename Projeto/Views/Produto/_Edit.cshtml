@@ -1,4 +1,4 @@
-@model Projeto.Models.Produto
+@model Projeto.ViewModels.ProdutoViewModel
 
 <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
@@ -22,6 +22,7 @@
                     <label class="col-md-2 control-label">Nome</label>
                     <div class="col-md-10">
                         <input type="Text" asp-for="Nome" class="form-control" />
+                        <span asp-validation-for="Nome" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -29,6 +30,7 @@
                     <label class="col-md-2 control-label">Preço</label>
                     <div class="col-md-10">
                         <input type="Text" asp-for="Preco" class="form-control" />
+                        <span asp-validation-for="Preco" class="text-danger"></span>
                     </div>
                 </div>              
             </div>      
@@ -44,6 +46,4 @@
 </div>
 
 
- @section Scripts {
-      @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-  }
+<partial name="_ValidationScriptsPartial">

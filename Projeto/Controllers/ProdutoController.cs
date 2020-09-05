@@ -31,9 +31,9 @@ namespace Projeto.Controllers
         public IActionResult Create() => PartialView("_Create");
 
         [HttpPost]
-        public async Task<IActionResult> Create(ProdutoViewModel modelo)
+        public async Task<IActionResult> Create(ProdutoViewModel viewModel)
         {
-            var result = await _repository.Cadastrar(modelo);
+            var result = await _repository.Cadastrar(viewModel);
             return RedirectToAction("Index");
         }
 
