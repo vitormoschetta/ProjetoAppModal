@@ -15,8 +15,13 @@ Dapper
 
 ### Formulários
 
-Adotamos dois modelos de formulário. Na entidade Produto os formulários são feitos em Modal Bootstrap. Toda a dinâmica do JavaScript sendo utilizada nas validações.
-Na entidade Produto utilizamos formulários convencionais, e aproveitamos todo o poder de validações do Asp.NET Core, com DataAnnotations e ModalState.
+Adotamos dois modelos de formulário. Conforme descrevemos a seguir:
+
+#### Na entidade Produto 
+Os formulários são feitos em Modal Bootstrap. Toda a dinâmica do JavaScript sendo utilizada nas validações.
+  
+#### Na entidade Cliente 
+Utilizamos formulários convencionais, e aproveitamos todo o poder de validações do Asp.NET Core, com DataAnnotations e ModalState.
 
 ![alt text](Projeto/wwwroot/images/01.jpg?raw=true=250x250 "Title")
 
