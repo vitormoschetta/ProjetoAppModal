@@ -8,13 +8,13 @@ namespace Projeto.Repository.Interfaces
 {
     public interface IProdutoRepository
     {
-        Task<bool> Cadastrar(ProdutoViewModel viewModel);
+        Task<Resultado> Cadastrar(ProdutoViewModel viewModel);
 
         Task<ProdutoViewModel> BuscarPorId(Guid id);
 
-        Task<bool> Atualizar(ProdutoViewModel viewModel);
+        Task<Resultado> Atualizar(ProdutoViewModel viewModel);
 
-        Task<bool> Excluir(Guid id);
+        Task<Resultado> Excluir(Guid id);
 
         Task<PaginatedList<Produto>> BuscarTodos(int? pageNumber);
 

@@ -33,7 +33,14 @@ namespace Projeto.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ProdutoViewModel viewModel)
         {
-            var result = await _repository.Cadastrar(viewModel);
+            if (!ModelState.IsValid) return View(viewModel);
+
+            var resultado = await _repository.Cadastrar(viewModel);
+            if (resultado.Sucesso == false)
+            {
+                ModelState.AddModelError(string.Empty, resultado.Mensagem);
+                return View(viewModel);
+            }
             return RedirectToAction("Index");
         }
 
@@ -61,10 +68,10 @@ namespace Projeto.Controllers
                 return View(viewModel);
             }
 
-            var result = await _repository.Atualizar(viewModel);
-            if (result != true)
+            var resultado = await _repository.Atualizar(viewModel);
+            if (resultado.Sucesso == false)
             {
-                ModelState.AddModelError(string.Empty, "Erro Interno.");
+                ModelState.AddModelError(string.Empty, resultado.Mensagem);
                 return View(viewModel);
             }
 
@@ -84,11 +91,11 @@ namespace Projeto.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteConfirm(Guid id)
         {
-            var result = await _repository.Excluir(id);
+            var resultado = await _repository.Excluir(id);
 
-            if (result != true)
+            if (resultado.Sucesso != true)
             {
-                ModelState.AddModelError(string.Empty, "Erro Interno.");
+                ModelState.AddModelError(string.Empty, resultado.Mensagem);
                 return View();
             }
 

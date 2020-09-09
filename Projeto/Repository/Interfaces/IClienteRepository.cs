@@ -8,13 +8,13 @@ namespace Projeto.Repository.Interfaces
 {
     public interface IClienteRepository
     {
-        Task<ErroViewModel> Cadastrar(ClienteViewModel viewModel);
+        Task<Resultado> Cadastrar(ClienteViewModel viewModel);
 
         Task<ClienteViewModel> BuscarPorId(Guid id);
 
-        Task<ErroViewModel> Atualizar(ClienteViewModel viewModel);
+        Task<Resultado> Atualizar(ClienteViewModel viewModel);
 
-        Task<ErroViewModel> Excluir(Guid id);
+        Task<Resultado> Excluir(Guid id);
 
         Task<PaginatedList<Cliente>> BuscarTodos(int? pageNumber);
 

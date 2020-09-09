@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Projeto.Validators
+namespace Projeto.Validators.DataAnnotations
 {
     public class ValidaMaiorDeIdade : ValidationAttribute
     {

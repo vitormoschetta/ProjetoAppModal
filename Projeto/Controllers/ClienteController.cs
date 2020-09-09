@@ -39,10 +39,10 @@ namespace Projeto.Controllers
         {
             if (!ModelState.IsValid) return View(viewModel);
 
-            var result = await _repository.Cadastrar(viewModel);
-            if (result.Valido == false)
+            var resultado = await _repository.Cadastrar(viewModel);
+            if (resultado.Sucesso == false)
             {
-                ModelState.AddModelError(string.Empty, result.Mensagem);
+                ModelState.AddModelError(string.Empty, resultado.Mensagem);
                 return View(viewModel);
             }
             return RedirectToAction("Index");
@@ -72,10 +72,10 @@ namespace Projeto.Controllers
                 return View(viewModel);
             }
 
-            var result = await _repository.Atualizar(viewModel);
-            if (result.Valido != true)
+            var resultado = await _repository.Atualizar(viewModel);
+            if (resultado.Sucesso == false)
             {
-                ModelState.AddModelError(string.Empty, result.Mensagem);
+                ModelState.AddModelError(string.Empty, resultado.Mensagem);
                 return View(viewModel);
             }
 
@@ -95,11 +95,11 @@ namespace Projeto.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteConfirm(Guid id)
         {
-            var result = await _repository.Excluir(id);
+            var resultado = await _repository.Excluir(id);
 
-            if (result.Valido != true)
+            if (resultado.Sucesso != true)
             {
-                ModelState.AddModelError(string.Empty, result.Mensagem);
+                ModelState.AddModelError(string.Empty, resultado.Mensagem);
                 return View();
             }
 

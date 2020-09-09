@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Projeto.Models;
-using Projeto.Validators;
+using Projeto.Validators.DataAnnotations;
 
 namespace Projeto.ViewModels
 {
