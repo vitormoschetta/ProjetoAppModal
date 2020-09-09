@@ -47,25 +47,25 @@ namespace Projeto.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, Produto modelo)
+        public async Task<IActionResult> Edit(Guid id, ProdutoViewModel viewModel)
         {
-            if (id != modelo.Id)
+            if (id != viewModel.Id)
             {
                 ModelState.AddModelError(string.Empty, "Identificador inválido.");
-                return View(modelo);
+                return View(viewModel);
             }
 
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError(string.Empty, "Modelo inválido.");
-                return View(modelo);
+                return View(viewModel);
             }
 
-            var result = await _repository.Atualizar(modelo);
+            var result = await _repository.Atualizar(viewModel);
             if (result != true)
             {
                 ModelState.AddModelError(string.Empty, "Erro Interno.");
-                return View(modelo);
+                return View(viewModel);
             }
 
             return RedirectToAction("Index");

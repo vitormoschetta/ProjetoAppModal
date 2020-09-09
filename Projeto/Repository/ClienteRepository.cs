@@ -5,12 +5,13 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Projeto.Data;
 using Projeto.Models;
+using Projeto.Repository.Interfaces;
 using Projeto.Util;
 using Projeto.ViewModels;
 
 namespace Projeto.Repository
 {
-    public class ClienteRepository
+    public class ClienteRepository : IClienteRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -102,6 +103,11 @@ namespace Projeto.Repository
         private bool Exist(Guid id)
         {
             return _context.Cliente.Any(x => x.Id == id);
+        }
+
+        bool IClienteRepository.Exist(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

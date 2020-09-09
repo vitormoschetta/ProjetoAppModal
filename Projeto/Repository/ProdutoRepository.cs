@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projeto.Data;
 using Projeto.Models;
+using Projeto.Repository.Interfaces;
 using Projeto.Util;
 using Projeto.ViewModels;
 
 namespace Projeto.Repository
 {
-    public class ProdutoRepository
+    public class ProdutoRepository : IProdutoRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -22,7 +23,7 @@ namespace Projeto.Repository
         }
 
 
-        public async Task<dynamic> Cadastrar(ProdutoViewModel viewModel)
+        public async Task<bool> Cadastrar(ProdutoViewModel viewModel)
         {
             var modelo = _mapper.Map<Produto>(viewModel);
             try
@@ -46,10 +47,12 @@ namespace Projeto.Repository
         }
 
 
-        public async Task<dynamic> Atualizar(Produto modelo)
+        public async Task<bool> Atualizar(ProdutoViewModel viewModel)
         {
             try
             {
+                var modelo = _mapper.Map<Produto>(viewModel);
+
                 _context.Update(modelo);
                 await _context.SaveChangesAsync();
                 return true;
@@ -60,7 +63,7 @@ namespace Projeto.Repository
             }
         }
 
-        public async Task<dynamic> Excluir(Guid id)
+        public async Task<bool> Excluir(Guid id)
         {
             var modelo = await _context.Produto.SingleAsync(x => x.Id == id);
             try
@@ -95,9 +98,11 @@ namespace Projeto.Repository
             return ModelComPaginacao;
         }
 
-        private bool Exist(Guid id)
+        public bool Exist(Guid id)
         {
             return _context.Produto.Any(x => x.Id == id);
         }
+
+
     }
 }
