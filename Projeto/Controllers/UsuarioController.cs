@@ -11,7 +11,7 @@ using Projeto.Models;
 
 namespace Projeto.Controllers
 {
-   // [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     public class UsuarioController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -125,19 +125,19 @@ namespace Projeto.Controllers
             return PartialView("_Details", modelo);
         }
 
-        
+
 
         private bool ModelExist(string id)
         {
-           return _context.Usuario.Any(x => x.Id == id);
+            return _context.Usuario.Any(x => x.Id == id);
         }
 
 
         public async Task<IActionResult> Perfis(string id)
-        {   
-            var Roles = _roleManager.Roles;                     
+        {
+            var Roles = _roleManager.Roles;
 
-            var modelo = await _context.Usuario.SingleAsync(m => m.Id == id);                        
+            var modelo = await _context.Usuario.SingleAsync(m => m.Id == id);
             ViewBag.PerfilUsuario = await _userManager.GetRolesAsync(modelo);
             ViewBag.UsuarioId = modelo.Id;
 
@@ -150,33 +150,37 @@ namespace Projeto.Controllers
             var usuario = _userManager.FindByIdAsync(usuarioId).Result;
             IdentityResult result;
 
-            if (acao == "adicionar"){
+            if (acao == "adicionar")
+            {
                 result = _userManager.AddToRoleAsync(usuario, roleName).Result;
-                usuario.Perfil = roleName;                
-            }                
-            else {
+                usuario.Perfil = roleName;
+            }
+            else
+            {
                 result = _userManager.RemoveFromRoleAsync(usuario, roleName).Result;
-                
+
                 var roles = _userManager.GetRolesAsync(usuario).Result;
-                if (roles != null){
+                if (roles != null)
+                {
                     for (int i = 0; i < 1; i++)
                     {
                         usuario.Perfil = roles[i];
                     }
                 }
-                else{
+                else
+                {
                     usuario.Perfil = string.Empty;
                 }
-                
+
             }
 
             _context.Update(usuario);
             _context.SaveChangesAsync();
-                
+
 
             if (!result.Succeeded) Errors(result);
 
-        }   
+        }
 
 
         private void Errors(IdentityResult result)
@@ -203,7 +207,7 @@ namespace Projeto.Controllers
 
 
 
-       
+
 
 
         // private void Errors(IdentityResult result)

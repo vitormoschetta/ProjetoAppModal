@@ -1,26 +1,17 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Projeto.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Projeto.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using System.Data;
-using Microsoft.Data.SqlClient;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Projeto.Repository;
 using Projeto.ViewModels;
 using AutoMapper;
+using Projeto.Domain.Entities;
 
 namespace Projeto
 {
@@ -48,7 +39,6 @@ namespace Projeto
 
             services.AddRazorPages();
 
-            services.AddScoped<ProdutoRepository>();
             services.AddScoped<ClienteRepository>();
 
             services.Configure<IdentityOptions>(options =>
@@ -85,8 +75,6 @@ namespace Projeto
             // AutoMapper
             var config = new AutoMapper.MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<ProdutoViewModel, Produto>();
-                cfg.CreateMap<Produto, ProdutoViewModel>();
                 cfg.CreateMap<ClienteViewModel, Cliente>();
                 cfg.CreateMap<Cliente, ClienteViewModel>();
             });

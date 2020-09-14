@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Projeto.Data;
-using Projeto.Models;
-using Projeto.Repository.Interfaces;
-using Projeto.Util;
-using Projeto.ViewModels;
+using Projeto.Domain.Commands;
+using Projeto.Domain.Entities;
+using Projeto.Domain.Repositories;
+using Projeto.Domain.Utils;
 
 namespace Projeto.Repository
 {
@@ -22,61 +22,61 @@ namespace Projeto.Repository
         }
 
 
-        public async Task<Resultado> Cadastrar(ClienteViewModel viewModel)
+        public async Task<CommandResult> Cadastrar(Cliente model)
         {
-            var existe = await _context.Cliente.FirstOrDefaultAsync(x => x.Nome == viewModel.Nome || x.Cpf == viewModel.Cpf);
-            if (existe != null) return new Resultado(false, "Já existe um cadastro com estes parâmetros.");
+            if (await CpfExists(model.Cpf) == true)
+                return new CommandResult(false, "CPF já cadastrado.");
 
             try
             {
-                var modelo = _mapper.Map<Cliente>(viewModel);
+                var modelo = _mapper.Map<Cliente>(model);
 
                 _context.Add(modelo);
                 await _context.SaveChangesAsync();
-                return new Resultado(true, string.Empty);
+                return new CommandResult(true, string.Empty);
             }
             catch (Exception e)
             {
-                return new Resultado(false, e.ToString());
+                return new CommandResult(false, e.ToString());
             }
 
         }
 
 
-        public async Task<ClienteViewModel> BuscarPorId(Guid id)
+        public async Task<Cliente> BuscarPorId(Guid id)
         {
             var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
-            return _mapper.Map<ClienteViewModel>(modelo);
+            return modelo;
         }
 
-        public async Task<Resultado> Atualizar(ClienteViewModel viewModel)
+        public async Task<CommandResult> Atualizar(Cliente model)
         {
             try
             {
-                var modelo = _mapper.Map<Cliente>(viewModel);
+                var modelo = _mapper.Map<Cliente>(model);
 
                 _context.Update(modelo);
                 await _context.SaveChangesAsync();
-                return new Resultado(true, string.Empty);
+                return new CommandResult(true, string.Empty);
             }
             catch (Exception e)
             {
-                return new Resultado(false, e.ToString());
+                return new CommandResult(false, e.ToString());
             }
         }
 
-        public async Task<Resultado> Excluir(Guid id)
+        public async Task<CommandResult> Excluir(Guid id)
         {
             var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
             try
             {
                 _context.Remove(modelo);
                 await _context.SaveChangesAsync();
-                return new Resultado(true, string.Empty);
+                return new CommandResult(true, string.Empty);
             }
             catch (Exception e)
             {
-                return new Resultado(false, e.ToString());
+                return new CommandResult(false, e.ToString());
             }
         }
 
@@ -105,9 +105,14 @@ namespace Projeto.Repository
             return _context.Cliente.Any(x => x.Id == id);
         }
 
-        bool IClienteRepository.Exist(Guid id)
+        public async Task<bool> CpfExists(string cpf)
         {
-            throw new NotImplementedException();
+            var existe = await _context.Cliente.FirstOrDefaultAsync(x => x.Cpf == cpf);
+            if (existe != null)
+                return true;
+
+            return false;
         }
+
     }
 }

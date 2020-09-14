@@ -1,18 +1,8 @@
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Projeto.Data;
-using Projeto.Models;
-using Dapper;
-using System.Data;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using Projeto.Util;
 using System;
 using Projeto.Repository;
-using Projeto.ViewModels;
+using Projeto.Domain.Entities;
 
 namespace Projeto.Controllers
 {
@@ -35,15 +25,15 @@ namespace Projeto.Controllers
         public IActionResult Create() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Create(ClienteViewModel viewModel)
+        public async Task<IActionResult> Create(Cliente model)
         {
-            if (!ModelState.IsValid) return View(viewModel);
+            if (!ModelState.IsValid) return View(model);
 
-            var resultado = await _repository.Cadastrar(viewModel);
-            if (resultado.Sucesso == false)
+            var resultado = await _repository.Cadastrar(model);
+            if (resultado.Success == false)
             {
-                ModelState.AddModelError(string.Empty, resultado.Mensagem);
-                return View(viewModel);
+                ModelState.AddModelError(string.Empty, resultado.Message);
+                return View(model);
             }
             return RedirectToAction("Index");
         }
@@ -52,31 +42,31 @@ namespace Projeto.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var viewModel = await _repository.BuscarPorId(id);
-            return View(viewModel);
+            var model = await _repository.BuscarPorId(id);
+            return View(model);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, ClienteViewModel viewModel)
+        public async Task<IActionResult> Edit(Guid id, Cliente model)
         {
-            if (id != viewModel.Id)
+            if (id != model.Id)
             {
                 ModelState.AddModelError(string.Empty, "Identificador inválido.");
-                return View(viewModel);
+                return View(model);
             }
 
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError(string.Empty, "Modelo inválido.");
-                return View(viewModel);
+                return View(model);
             }
 
-            var resultado = await _repository.Atualizar(viewModel);
-            if (resultado.Sucesso == false)
+            var resultado = await _repository.Atualizar(model);
+            if (resultado.Success == false)
             {
-                ModelState.AddModelError(string.Empty, resultado.Mensagem);
-                return View(viewModel);
+                ModelState.AddModelError(string.Empty, resultado.Message);
+                return View(model);
             }
 
             return RedirectToAction("Index");
@@ -87,8 +77,8 @@ namespace Projeto.Controllers
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            var viewModel = await _repository.BuscarPorId(id);
-            return View(viewModel);
+            var model = await _repository.BuscarPorId(id);
+            return View(model);
         }
 
 
@@ -97,9 +87,9 @@ namespace Projeto.Controllers
         {
             var resultado = await _repository.Excluir(id);
 
-            if (resultado.Sucesso != true)
+            if (resultado.Success != true)
             {
-                ModelState.AddModelError(string.Empty, resultado.Mensagem);
+                ModelState.AddModelError(string.Empty, resultado.Message);
                 return View();
             }
 
