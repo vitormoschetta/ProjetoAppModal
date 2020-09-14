@@ -22,7 +22,7 @@ namespace Projeto.Areas.Identity.Pages.Account
         private readonly SignInManager<Usuario> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<Usuario> signInManager,
+        public LoginModel(SignInManager<Usuario> signInManager, 
             ILogger<LoginModel> logger,
             UserManager<Usuario> userManager)
         {
@@ -80,21 +80,19 @@ namespace Projeto.Areas.Identity.Pages.Account
             {
                 var usuario = _userManager.Users.SingleOrDefault(x => x.Email == Input.Email);
 
-                if (usuario != null)
-                { // Se Usuario existir mas tiver Inativo ou com perfil null
-                    if (usuario.Status == "Inativo")
-                    {
+                if (usuario != null){ // Se Usuario existir mas tiver Inativo ou com perfil null
+                    if (usuario.Status == "Inativo"){
                         ModelState.AddModelError(string.Empty, "Usuario inativo. Contate o Administrador");
                         return Page();
                     }
                 }
-
+                
 
                 //isPersistent:true => navegador mantem cokie mesmo fechando browser
                 //lockoutOnFailure:true => usuario errar a senha mais de tres vezes bloqueia
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, isPersistent: true, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, isPersistent:true, lockoutOnFailure: true);
                 if (result.Succeeded)
-                {
+                {                    
                     _logger.LogInformation("Usuario conectado.");
                     return LocalRedirect(returnUrl);
                 }

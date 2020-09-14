@@ -10,7 +10,7 @@ using Projeto.Data;
 using Projeto.Models;
 
 namespace Projeto.Controllers
-{
+{   
     [AllowAnonymous]
     public class HomeController : Controller
     {
@@ -23,19 +23,19 @@ namespace Projeto.Controllers
         }
         public IActionResult Index()
         {
-            if (User.Identity.IsAuthenticated)
+           if (User.Identity.IsAuthenticated)
             {
                 var usuario = _context.Usuario.SingleOrDefault(x => x.UserName == User.Identity.Name);
-                switch (usuario.Perfil)
-                {
-                    case "Admin":
+                switch (usuario.Perfil) 
+                {                            
+                    case "Admin": 
                         return RedirectToAction("Index", "Usuario");
                     case "Usuario":
-                        return RedirectToAction("Index", "Produto");
+                        return RedirectToAction("Index", "Produto");                  
                     default:
                         return RedirectToAction("Index", "Produto");
-                }
-
+                }       
+      
             }
             return View();
         }
@@ -49,6 +49,6 @@ namespace Projeto.Controllers
         }
 
 
-
+   
     }
 }

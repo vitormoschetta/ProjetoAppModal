@@ -4,12 +4,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Projeto.Data;
-using Projeto.Domain.Commands;
-using Projeto.Domain.Entities;
-using Projeto.Domain.Handlers;
-using Projeto.Domain.Repositories;
-using Projeto.Domain.Utils;
-using Projeto.Shared.Handlers;
+using Projeto.Models;
+using Projeto.Repository.Interfaces;
+using Projeto.Util;
+using Projeto.ViewModels;
 
 namespace Projeto.Repository
 {
@@ -17,7 +15,6 @@ namespace Projeto.Repository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-
         public ClienteRepository(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
@@ -25,61 +22,61 @@ namespace Projeto.Repository
         }
 
 
-        public async Task<CommandResult> Cadastrar(Cliente model)
+        public async Task<Resultado> Cadastrar(ClienteViewModel viewModel)
         {
-            if (await CpfExists(model.Cpf) == true)
-                return new CommandResult(false, "CPF já cadastrado.");
+            var existe = await _context.Cliente.FirstOrDefaultAsync(x => x.Nome == viewModel.Nome || x.Cpf == viewModel.Cpf);
+            if (existe != null) return new Resultado(false, "Já existe um cadastro com estes parâmetros.");
 
             try
             {
-                var modelo = _mapper.Map<Cliente>(model);
+                var modelo = _mapper.Map<Cliente>(viewModel);
 
                 _context.Add(modelo);
                 await _context.SaveChangesAsync();
-                return new CommandResult(true, string.Empty);
+                return new Resultado(true, string.Empty);
             }
             catch (Exception e)
             {
-                return new CommandResult(false, e.ToString());
+                return new Resultado(false, e.ToString());
             }
 
         }
 
 
-        public async Task<Cliente> BuscarPorId(Guid id)
+        public async Task<ClienteViewModel> BuscarPorId(Guid id)
         {
             var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
-            return modelo;
+            return _mapper.Map<ClienteViewModel>(modelo);
         }
 
-        public async Task<CommandResult> Atualizar(Cliente model)
+        public async Task<Resultado> Atualizar(ClienteViewModel viewModel)
         {
             try
             {
-                var modelo = _mapper.Map<Cliente>(model);
+                var modelo = _mapper.Map<Cliente>(viewModel);
 
                 _context.Update(modelo);
                 await _context.SaveChangesAsync();
-                return new CommandResult(true, string.Empty);
+                return new Resultado(true, string.Empty);
             }
             catch (Exception e)
             {
-                return new CommandResult(false, e.ToString());
+                return new Resultado(false, e.ToString());
             }
         }
 
-        public async Task<CommandResult> Excluir(Guid id)
+        public async Task<Resultado> Excluir(Guid id)
         {
             var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
             try
             {
                 _context.Remove(modelo);
                 await _context.SaveChangesAsync();
-                return new CommandResult(true, string.Empty);
+                return new Resultado(true, string.Empty);
             }
             catch (Exception e)
             {
-                return new CommandResult(false, e.ToString());
+                return new Resultado(false, e.ToString());
             }
         }
 
@@ -108,14 +105,9 @@ namespace Projeto.Repository
             return _context.Cliente.Any(x => x.Id == id);
         }
 
-        public async Task<bool> CpfExists(string cpf)
+        bool IClienteRepository.Exist(Guid id)
         {
-            var existe = await _context.Cliente.FirstOrDefaultAsync(x => x.Cpf == cpf);
-            if (existe != null)
-                return true;
-
-            return false;
+            throw new NotImplementedException();
         }
-
     }
 }

@@ -150,7 +150,7 @@ namespace Projeto.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Projeto.Domain.Entities.Cliente", b =>
+            modelBuilder.Entity("Projeto.Models.Cliente", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -160,10 +160,7 @@ namespace Projeto.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DataNascimento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("date");
 
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
@@ -171,6 +168,23 @@ namespace Projeto.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cliente");
+                });
+
+            modelBuilder.Entity("Projeto.Models.Produto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Preco")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Produto");
                 });
 
             modelBuilder.Entity("Projeto.Models.Usuario", b =>

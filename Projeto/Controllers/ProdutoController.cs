@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -5,21 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projeto.Data;
 using Projeto.Models;
-using Dapper;
-using System.Data;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using Projeto.Util;
-using System;
 using Projeto.Repository;
+using Projeto.Util;
 using Projeto.ViewModels;
 
 namespace Projeto.Controllers
 {
-    public class ClienteController : Controller
+    public class ProdutoController : Controller
     {
-        private readonly ClienteRepository _repository;
-        public ClienteController(ClienteRepository repository)
+        private readonly ProdutoRepository _repository;
+        public ProdutoController(ProdutoRepository repository)
         {
             _repository = repository;
         }
@@ -32,10 +28,10 @@ namespace Projeto.Controllers
         }
 
 
-        public IActionResult Create() => View();
+        public IActionResult Create() => PartialView("_Create");
 
         [HttpPost]
-        public async Task<IActionResult> Create(ClienteViewModel viewModel)
+        public async Task<IActionResult> Create(ProdutoViewModel viewModel)
         {
             if (!ModelState.IsValid) return View(viewModel);
 
@@ -52,13 +48,13 @@ namespace Projeto.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var viewModel = await _repository.BuscarPorId(id);
-            return View(viewModel);
+            var modelo = await _repository.BuscarPorId(id);
+            return PartialView("_Edit", modelo);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, ClienteViewModel viewModel)
+        public async Task<IActionResult> Edit(Guid id, ProdutoViewModel viewModel)
         {
             if (id != viewModel.Id)
             {
@@ -87,8 +83,8 @@ namespace Projeto.Controllers
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            var viewModel = await _repository.BuscarPorId(id);
-            return View(viewModel);
+            var modelo = await _repository.BuscarPorId(id);
+            return PartialView("_Delete", modelo);
         }
 
 

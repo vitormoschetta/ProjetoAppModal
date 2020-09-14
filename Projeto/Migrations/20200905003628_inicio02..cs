@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Projeto.Migrations
 {
-    public partial class inicio : Migration
+    public partial class inicio02 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -55,12 +55,24 @@ namespace Projeto.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     Nome = table.Column<string>(nullable: true),
                     DataNascimento = table.Column<DateTime>(nullable: true),
-                    Cpf = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true)
+                    Cpf = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cliente", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Produto",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Nome = table.Column<string>(nullable: true),
+                    Preco = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Produto", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -228,6 +240,9 @@ namespace Projeto.Migrations
 
             migrationBuilder.DropTable(
                 name: "Cliente");
+
+            migrationBuilder.DropTable(
+                name: "Produto");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
