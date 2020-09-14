@@ -12,6 +12,8 @@ using Projeto.Repository;
 using Projeto.ViewModels;
 using AutoMapper;
 using Projeto.Domain.Entities;
+using Projeto.Domain.Commands;
+
 
 namespace Projeto
 {

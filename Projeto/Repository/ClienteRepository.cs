@@ -9,6 +9,7 @@ using Projeto.Domain.Entities;
 using Projeto.Domain.Handlers;
 using Projeto.Domain.Repositories;
 using Projeto.Domain.Utils;
+using Projeto.Shared.Handlers;
 
 namespace Projeto.Repository
 {
@@ -16,6 +17,7 @@ namespace Projeto.Repository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+
         public ClienteRepository(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;

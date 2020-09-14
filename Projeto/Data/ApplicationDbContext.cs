@@ -16,6 +16,10 @@ namespace Projeto.Data
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Cliente> Cliente { get; set; }
 
-
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Ignore<Notification>();
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

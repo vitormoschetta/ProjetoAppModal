@@ -54,7 +54,7 @@ namespace Projeto.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Nome = table.Column<string>(nullable: true),
-                    DataNascimento = table.Column<DateTime>(nullable: false),
+                    DataNascimento = table.Column<DateTime>(nullable: true),
                     Cpf = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true)
                 },
@@ -169,26 +169,6 @@ namespace Projeto.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Notification",
-                columns: table => new
-                {
-                    NotificationId = table.Column<Guid>(nullable: false),
-                    Property = table.Column<string>(nullable: true),
-                    Message = table.Column<string>(nullable: true),
-                    ClienteId = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Notification", x => x.NotificationId);
-                    table.ForeignKey(
-                        name: "FK_Notification_Cliente_ClienteId",
-                        column: x => x.ClienteId,
-                        principalTable: "Cliente",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -227,11 +207,6 @@ namespace Projeto.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Notification_ClienteId",
-                table: "Notification",
-                column: "ClienteId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -252,16 +227,13 @@ namespace Projeto.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Notification");
+                name: "Cliente");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Cliente");
         }
     }
 }
