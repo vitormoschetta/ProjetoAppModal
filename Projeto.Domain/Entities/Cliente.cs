@@ -6,6 +6,8 @@ namespace Projeto.Domain.Entities
 {
     public class Cliente : Entity
     {
+        public Cliente()
+        { }
         public Cliente(string nome, DateTime dataNascimento, string cpf, string email)
         {
             Nome = nome;
@@ -21,7 +23,7 @@ namespace Projeto.Domain.Entities
             );
         }
         public string Nome { get; set; }
-        public DateTime DataNascimento { get; set; }
+        public DateTime? DataNascimento { get; set; }
         public string Cpf { get; set; }
         public string Email { get; set; }
 

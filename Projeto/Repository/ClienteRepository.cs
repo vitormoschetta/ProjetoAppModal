@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Projeto.Data;
 using Projeto.Domain.Commands;
 using Projeto.Domain.Entities;
+using Projeto.Domain.Handlers;
 using Projeto.Domain.Repositories;
 using Projeto.Domain.Utils;
 
