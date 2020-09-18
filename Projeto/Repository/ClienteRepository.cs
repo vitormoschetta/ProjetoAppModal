@@ -22,10 +22,10 @@ namespace Projeto.Repository
         }
 
 
-        public async Task<Resultado> Cadastrar(ClienteViewModel viewModel)
+        public async Task<ResultMessage> Cadastrar(ClienteViewModel viewModel)
         {
             var existe = await _context.Cliente.FirstOrDefaultAsync(x => x.Nome == viewModel.Nome || x.Cpf == viewModel.Cpf);
-            if (existe != null) return new Resultado(false, "Já existe um cadastro com estes parâmetros.");
+            if (existe != null) return new ResultMessage(false, "Já existe um cadastro com estes parâmetros.");
 
             try
             {
@@ -33,11 +33,11 @@ namespace Projeto.Repository
 
                 _context.Add(modelo);
                 await _context.SaveChangesAsync();
-                return new Resultado(true, string.Empty);
+                return new ResultMessage(true, string.Empty);
             }
             catch (Exception e)
             {
-                return new Resultado(false, e.ToString());
+                return new ResultMessage(false, e.ToString());
             }
 
         }
@@ -49,7 +49,7 @@ namespace Projeto.Repository
             return _mapper.Map<ClienteViewModel>(modelo);
         }
 
-        public async Task<Resultado> Atualizar(ClienteViewModel viewModel)
+        public async Task<ResultMessage> Atualizar(ClienteViewModel viewModel)
         {
             try
             {
@@ -57,26 +57,26 @@ namespace Projeto.Repository
 
                 _context.Update(modelo);
                 await _context.SaveChangesAsync();
-                return new Resultado(true, string.Empty);
+                return new ResultMessage(true, string.Empty);
             }
             catch (Exception e)
             {
-                return new Resultado(false, e.ToString());
+                return new ResultMessage(false, e.ToString());
             }
         }
 
-        public async Task<Resultado> Excluir(Guid id)
+        public async Task<ResultMessage> Excluir(Guid id)
         {
             var modelo = await _context.Cliente.SingleAsync(x => x.Id == id);
             try
             {
                 _context.Remove(modelo);
                 await _context.SaveChangesAsync();
-                return new Resultado(true, string.Empty);
+                return new ResultMessage(true, string.Empty);
             }
             catch (Exception e)
             {
-                return new Resultado(false, e.ToString());
+                return new ResultMessage(false, e.ToString());
             }
         }
 

@@ -23,18 +23,18 @@ namespace Projeto.Repository
         }
 
 
-        public async Task<Resultado> Cadastrar(ProdutoViewModel viewModel)
+        public async Task<ResultMessage> Cadastrar(ProdutoViewModel viewModel)
         {
             var modelo = _mapper.Map<Produto>(viewModel);
             try
             {
                 _context.Add(modelo);
                 await _context.SaveChangesAsync();
-                return new Resultado(true, string.Empty);
+                return new ResultMessage(true, string.Empty);
             }
             catch (Exception e)
             {
-                return new Resultado(false, e.ToString());
+                return new ResultMessage(false, e.ToString());
             }
 
         }
@@ -47,7 +47,7 @@ namespace Projeto.Repository
         }
 
 
-        public async Task<Resultado> Atualizar(ProdutoViewModel viewModel)
+        public async Task<ResultMessage> Atualizar(ProdutoViewModel viewModel)
         {
             try
             {
@@ -55,26 +55,26 @@ namespace Projeto.Repository
 
                 _context.Update(modelo);
                 await _context.SaveChangesAsync();
-                return new Resultado(true, string.Empty);
+                return new ResultMessage(true, string.Empty);
             }
             catch (Exception e)
             {
-                return new Resultado(false, e.ToString());
+                return new ResultMessage(false, e.ToString());
             }
         }
 
-        public async Task<Resultado> Excluir(Guid id)
+        public async Task<ResultMessage> Excluir(Guid id)
         {
             var modelo = await _context.Produto.SingleAsync(x => x.Id == id);
             try
             {
                 _context.Remove(modelo);
                 await _context.SaveChangesAsync();
-                return new Resultado(true, string.Empty);
+                return new ResultMessage(true, string.Empty);
             }
             catch (Exception e)
             {
-                return new Resultado(false, e.ToString());
+                return new ResultMessage(false, e.ToString());
             }
         }
 

@@ -1,8 +1,8 @@
-namespace Projeto.Repository
+namespace Projeto.Models
 {
-    public class Resultado
+    public class ResultMessage
     {
-        public Resultado(bool sucesso, string mensagem)
+        public ResultMessage(bool sucesso, string mensagem)
         {
             Sucesso = sucesso;
             Mensagem = mensagem;
